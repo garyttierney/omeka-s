@@ -70,8 +70,8 @@ $sortHeadings = [
                     <?php if ($resourceTemplate->userIsAllowed('update')): ?>
                     <li><?php echo $resourceTemplate->link('', 'edit', [
                         'class' => 'o-icon-edit',
-                        'aria-label' => $escape($this->translate('Edit')),
-                        'title' => $escape($this->translate('Edit')),
+                        'aria-label' => $this->translate('Edit'),
+                        'title' => $this->translate('Edit'),
                     ]); ?></li>
                     <?php endif; ?>
                     <?php if ($resourceTemplate->userIsAllowed('delete')): ?>
@@ -88,7 +88,7 @@ $sortHeadings = [
                         title="<?php echo $escape($this->translate('Details')); ?>"></a></li>
                  </ul>
             </td>
-            <td><?php echo $escape($resourceTemplate->displayResourceClassLabel()); ?></td>
+            <td><?php echo $escape($this->translate($resourceTemplate->displayResourceClassLabel())); ?></td>
             <td><?php echo $ownerText; ?></td>
             <td><?php echo $this->hyperlink($resourceTemplate->itemCount(), $this->url('admin/default', ['controller' => 'item', 'action' => 'browse'], ['query' => ['resource_template_id' => $resourceTemplate->id()]])); ?></td>
         </tr>
