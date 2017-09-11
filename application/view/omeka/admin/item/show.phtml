@@ -12,7 +12,7 @@ $sectionNavs = [
     'item-linked' => $this->translate('Linked resources'),
 ];
 ?>
-<?php echo $this->pageTitle(sprintf($this->translate('Item: “%s”'), $item->displayTitle())); ?>
+<?php echo $this->pageTitle($item->displayTitle(), 1, $this->translate('Items')); ?>
 <div id="page-actions">
     <?php if ($item->userIsAllowed('update')): ?>
     <?php echo $item->link($this->translate('Edit item'), 'edit', ['class' => 'button']); ?>
@@ -25,7 +25,7 @@ $sectionNavs = [
     <?php if ( $item->resourceClass()): ?>
         <div class="meta-group">
             <h4><?php echo $this->translate('Class'); ?></h4>
-            <div class="value"><?php echo $escape($item->resourceClass()->label()); ?></div>
+            <div class="value"><?php echo $escape($this->translate($item->resourceClass()->label())); ?></div>
         </div>
     <?php endif; ?>
     <?php echo $item->displayValues(); ?>

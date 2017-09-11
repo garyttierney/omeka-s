@@ -10,7 +10,7 @@ class InstallationForm extends Form
     {
         // By removing CSRF protection we're removing the need to use session
         // data during installation. This is needed for databse session storage.
-        $this->remove('csrf');
+        $this->remove('installationform_csrf');
 
         $this->add([
             'name' => 'user',
@@ -121,6 +121,14 @@ class InstallationForm extends Form
             ],
         ]);
 
+        $this->get('settings')->add([
+            'name' => 'locale',
+            'type' => 'Omeka\Form\Element\LocaleSelect',
+            'options' => [
+                'label' => 'Locale', // @translate
+            ],
+        ]);
+
         $inputFilter = $this->getInputFilter();
         $inputFilter->get('user')->add([
             'name' => 'password',
@@ -159,6 +167,10 @@ class InstallationForm extends Form
                     ],
                 ],
             ],
+        ]);
+        $inputFilter->get('settings')->add([
+            'name' => 'locale',
+            'allow_empty' => true,
         ]);
     }
 }
