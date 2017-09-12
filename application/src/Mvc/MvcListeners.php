@@ -1,6 +1,7 @@
 <?php
 namespace Omeka\Mvc;
 
+use Omeka\Mvc\Exception\RuntimeException;
 use Omeka\Site\Theme\Manager;
 use Omeka\Site\Theme\Theme;
 use Zend\EventManager\EventManagerInterface;
@@ -223,9 +224,12 @@ class MvcListeners extends AbstractListenerAggregate
 
         $services = $event->getApplication()->getServiceManager();
 
+        $themeName = $site->theme();
         $themeManager = $services->get('Omeka\Site\ThemeManager');
         $currentTheme = $themeManager->getCurrentTheme();
         if (Manager::STATE_ACTIVE !== $currentTheme->getState()) {
+            $event->setParam('exception', new Exception\RuntimeException("Configured theme '$themeName' was not found'"));
+
             $event->setError(ZendApplication::ERROR_EXCEPTION);
             $event->setName(MvcEvent::EVENT_DISPATCH_ERROR);
             $event->getApplication()->getEventManager()->triggerEvent($event);
