@@ -21,6 +21,8 @@ class LoggerFactory implements FactoryInterface
     public function __invoke(ContainerInterface $serviceLocator, $requestedName, array $options = null)
     {
         $config = $serviceLocator->get('Config');
+        $loggerOptions = [];
+
         if (isset($config['logger']['log'])
             && $config['logger']['log']
             && isset($config['logger']['path'])
@@ -28,11 +30,17 @@ class LoggerFactory implements FactoryInterface
             && is_dir($config['logger']['path']) === false
         ) {
             $writer = new Stream($config['logger']['path']);
+
+            if (isset($config['logger']['options'])) {
+                $loggerOptions = $config['logger']['options'];
+            }
         } else {
             $writer = new Noop;
         }
-        $logger = new Logger;
+
+        $logger = new Logger($loggerOptions);
         $logger->addWriter($writer);
+
         $filter = new Priority($config['logger']['priority']);
         $writer->addFilter($filter);
         return $logger;
