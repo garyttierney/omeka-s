@@ -1,0 +1,45 @@
+version: "2"
+services:
+  web:
+    container_name: omeka_web
+    build:
+      context: ../
+      dockerfile: Dockerfile.web
+    links:
+      - app:omeka_app
+    ports:
+      - "8888:80"
+
+  mysql:
+    container_name: omeka_db
+    image: mysql:5.7
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=omeka_s
+      - MYSQL_USER=omeka_s
+      - MYSQL_PASSWORD=Password123
+    ports:
+      - "3334:3306"
+
+  app:
+    container_name: omeka_app
+    environment:
+      - PHP_IDE_CONFIG=serverName=omeka-workspace
+      - OMEKA__DATABASE_HOST=omeka_db
+      - OMEKA__DATABASE_NAME=omeka_s
+      - OMEKA__DATABASE_USER=omeka_s
+      - OMEKA__DATABASE_PASSWORD=Password123
+      - OMEKA__DATABASE_PORT=3306
+    depends_on:
+      - mysql
+    links:
+      - mysql:omeka_db
+    build:
+      context: ../
+      dockerfile: Dockerfile.app
+    volumes:
+      - ../modules:/srv/omeka/modules
+      - ../themes:/srv/omeka/themes
+      - ../application:/srv/omeka/application
+      - ../index.php:/srv/omeka/index.php
+      - ../docker/config/app/database.ini:/srv/omeka/config/database.ini

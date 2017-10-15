@@ -1,0 +1,4 @@
+FROM nginx:latest
+ADD static /var/www/html
+ADD application/asset /var/www/html/application/asset/
+ADD docker/config/nginx/*.conf /etc/nginx/conf.d/
