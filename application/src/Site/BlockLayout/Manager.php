@@ -18,6 +18,11 @@ class Manager extends AbstractPluginManager
         try {
             $instance = parent::get($name, $options, $usePeeringServiceManagers);
         } catch (ServiceNotFoundException $e) {
+            $logger = parent::get('Omeka\Logger');
+            $logger->warn($e->getMessage(), [
+                'exception' => $e
+            ]);
+
             $instance = new Fallback($name);
         }
         return $instance;
